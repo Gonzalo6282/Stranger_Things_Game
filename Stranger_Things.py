@@ -1,16 +1,15 @@
 from moviepy.editor import *
 import pygame
 import time
-#from pygame.constants import NOEVENT
 pygame.init()
 
-#Window
+# Window
 win = pygame.display.set_mode((500,480))
 pygame.display.set_caption('Stranger Things')
 icon = pygame.image.load('icon.jpg')
 pygame.display.set_icon(icon)
 
-#Images Jim_Hopper
+# Images Jim_Hopper
 walkRight = [pygame.image.load('r1.png'), pygame.image.load('r2.png'), pygame.image.load('r3.png'), pygame.image.load('r4.png'), pygame.image.load('r5.png'), pygame.image.load('r6.png'), pygame.image.load('r7.png'), pygame.image.load('r8.png'), pygame.image.load('r9.png')]
 walkLeft = [pygame.image.load('l1.png'), pygame.image.load('l2.png'), pygame.image.load('l3.png'), pygame.image.load('l4.png'), pygame.image.load('l5.png'), pygame.image.load('l6.png'), pygame.image.load('l7.png'), pygame.image.load('l8.png'), pygame.image.load('l9.png')]
 jim_hopper_dead = [pygame.image.load('d1.png'), pygame.image.load('d2.png'), pygame.image.load('d3.png'), pygame.image.load('d4.png'), pygame.image.load('d5.png'), pygame.image.load('d6.png')]
@@ -18,18 +17,18 @@ char  = pygame.image.load('standing.png')
 hearts = pygame.image.load('heart.png')
 broken_heart = pygame.image.load('broken_heart.png')
 
-#Backgroud images
+# Backgroud images
 start = pygame.image.load('start_button.png')
 bg = pygame.image.load('back.png')
 bg2 = pygame.image.load('bg2.png')
 bgwin = pygame.image.load('bg_win.png')
 bglose = pygame.image.load('bglose.png')
 
-#Intro video
+# Intro video
 clip = VideoFileClip('intro.mp4')
 clip1 = clip.resize((480,500))
 
-#Sounds
+# Sounds
 collisionSound = pygame.mixer.Sound('collision.mp3')
 jumpSound = pygame.mixer.Sound('jump.mp3')
 bulletSound = pygame.mixer.Sound('bullet.mp3')      
@@ -37,17 +36,15 @@ hitSound = pygame.mixer.Sound('hit.mp3')
 winSound = pygame.mixer.Sound('win.mp3')
 loseSound = pygame.mixer.Sound('lose.mp3')            
 music = pygame.mixer.music.load('music.mp3')      
-pygame.mixer.music.play(-1)                         #fix score
+pygame.mixer.music.play(-1)                        
 
-#drawGameWindow() == False
-
-#Timer
+# Timer
 clock = pygame.time.Clock()
 
 # score = 0
 
     
-#Hero Jim Hopper                                                    
+# Hero Jim Hopper                                                    
 class player(object):
     def __init__(self, x, y, width, height):
         self.x = x
@@ -66,7 +63,7 @@ class player(object):
         self.visible = True
         self.dead = jim_hopper_dead 
      
-    #Player movement   
+ # Player movement   
     def draw(self, win):
         if self.visible:
             if self.walkCount + 1 >= 27:
@@ -85,14 +82,14 @@ class player(object):
                 else:
                     win.blit(walkLeft[0], (self.x, self.y))
             
-            #Player healthbar and hitbox
+            # Player healthbar and hitbox
             pygame.draw.rect(win, (255,0,0), (390, 10, 100, 10))
             pygame.draw.rect(win, (0,255,0), (390, 10, 100 -(10 * (10 - self.health)), 10))       
             self.hitbox = (self.x + 17, self.y + 2, 31, 57)
             win.blit(hearts, (483, 8)) 
             #pygame.draw.rect(win, (255, 0, 0 ), self.hitbox, 2)
     
-    #Player health function    
+# Player health function    
     def hit(self):
         self.isJump = False
         self.jumpCount = 10
@@ -123,7 +120,7 @@ class player(object):
             time.sleep(4)
             pygame.quit()
 
-#Player bullets            
+# Player bullets            
 class projectile(object):
     def __init__(self, x, y, radius, color, facing):
         self.x = x
@@ -136,7 +133,7 @@ class projectile(object):
     def draw(self, win):
         pygame.draw.circle(win, self.color, (self.x, self.y), self.radius)
 
-#Enemy Demogorgon
+# Enemy Demogorgon
 class enemy(object):
     walkRight = [pygame.image.load('re1.png'), pygame.image.load('re2.png'), pygame.image.load('re3.png'), pygame.image.load('re4.png'), pygame.image.load('re5.png'), pygame.image.load('re6.png'), pygame.image.load('re7.png'), pygame.image.load('re8.png'), pygame.image.load('re9.png'), pygame.image.load('re10.png'), pygame.image.load('re11.png')]
     walkLeft = [pygame.image.load('le1.png'), pygame.image.load('le2.png'), pygame.image.load('le3.png'), pygame.image.load('le4.png'), pygame.image.load('le5.png'), pygame.image.load('le6.png'), pygame.image.load('le7.png'), pygame.image.load('le8.png'), pygame.image.load('le9.png'), pygame.image.load('le10.png'), pygame.image.load('le11.png')]
@@ -156,7 +153,7 @@ class enemy(object):
         self.health = 10
         self.visible = True
         
-    #Enemy movement    
+# Enemy movement    
     def draw(self, win):
         self.move()
         if self.visible: 
@@ -170,7 +167,7 @@ class enemy(object):
                 win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
                 self.walkCount += 1
             
-            #Enemy helthbar and hitbox    
+            # Enemy helthbar and hitbox    
             pygame.draw.rect(win, (255,0,0), (10, 10, 100, 10))
             pygame.draw.rect(win, (0,255,0), (10, 10, 100 -(10 * (10 - self.health)), 10))   
             self.hitbox = (self.x + 20, self.y, 28, 60)
@@ -191,7 +188,7 @@ class enemy(object):
                 self.vel = self.vel * -1
                 self.walkCount = 0
     
-    #Enemy health function            
+# Enemy health function            
     def hit(self):
         if self.health > 0:
             self.health -= 1
@@ -206,7 +203,7 @@ class enemy(object):
             time.sleep(4)
             pygame.quit()
                 
-    #Enemy collison function   
+# Enemy collison function   
     def colision(self):
         self.x = 100
         self.y = 410
@@ -219,7 +216,7 @@ class enemy(object):
                     i = 101
                     pygame.quit() 
 
-#Start button                    
+# Start button                    
 class Button():
     def __init__(self, x, y, image):
         self.image = image
@@ -243,7 +240,7 @@ class Button():
         
 start_button = Button(160,280, start)         
 
-#Intro window
+# Intro window
 def drawGameWindow():
     win.blit(bg, (0,0))
     if start_button.draw():
@@ -252,17 +249,9 @@ def drawGameWindow():
          clip1.close()
           
     pygame.display.update()
-      #clock.tick(15)
-    #redrawGameWindow()#NEW TEST
-    #pygame.time.delay(100)
-    #redrawGameWindow = True
-        
-     
-    
              
-#Gameplay window           
+# Gameplay window           
 def redrawGameWindow():
-    #if drawGameWindow == True:
     win.blit(bg2, (0,0))
     #text = font.render('Score: ' + str(score), 1, (255,0,0))
     #win.blit(text, (190, 10))
@@ -274,7 +263,7 @@ def redrawGameWindow():
     pygame.display.update()
         
     
-#main loop
+# Main loop
 font = pygame.font.SysFont('comicsans', 30, True)       
 jim_hopper = player(300, 410, 64, 64)
 demogorgon = enemy(100, 410, 64, 64, 300)
@@ -368,3 +357,4 @@ while run:
     redrawGameWindow()   
         
 pygame.quit()
+
